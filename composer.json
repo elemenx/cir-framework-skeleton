@@ -1,0 +1,40 @@
+{
+    "name": "elemenx/cir-framework-skeleton",
+    "description": "elemenx cir framework skeleton",
+    "keywords": [
+        "elemenx", "cir", "cir framework skeleton"
+    ],
+    "type": "library",
+    "require": {
+        "php": "^7.4 || ^8.0",
+        "ajcastro/eager-load-pivot-relations": "^0.2.2",
+        "elemenx/laravel-api-pagination": "^0.1.6",
+        "kalnoy/nestedset": "^6.0",
+        "illuminate/auth": "^7.0|^8.0|^9.0|^10.0",
+        "illuminate/database": "^7.0|^8.0|^9.0|^10.0",
+        "illuminate/http": "^7.0|^8.0|^9.0|^10.0",
+        "illuminate/support": "^7.0|^8.0|^9.0|^10.0",
+        "maatwebsite/excel": "^3.1"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Elemenx\\CirFrameworkSkeleton\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "dongdong",
+            "email": "dongdong@elemenx.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Elemenx\\CirFrameworkSkeleton\\CirFrameworkSkeletonServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
