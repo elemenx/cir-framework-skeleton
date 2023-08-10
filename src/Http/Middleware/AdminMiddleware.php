@@ -17,7 +17,6 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        cir_framework_skeleton
         $guard = config('cir_framework_skeleton.guard.auth');
         $user = Auth::guard($guard)->user();
 

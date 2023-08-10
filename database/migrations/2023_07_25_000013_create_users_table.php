@@ -25,7 +25,6 @@ class CreateUsersTable extends Migration
             $table->timestamps();
             $table->timestamp('issued_at')->nullable()->comment('鉴权颁发时间');
             $table->timestamp('reset_at')->nullable()->comment('密码重置时间');
-            $table->softDeletes();
         });
     }
 

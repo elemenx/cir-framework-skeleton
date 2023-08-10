@@ -16,7 +16,7 @@ trait ProvidesConvenienceMethods
     {
         $result = [
             'code'    => $code,
-            'message' => $code == 200 ? 'OK' : trans('cir_framework_skeleton::success.' . $code, $params),
+            'message' => $code == 200 ? 'OK' : $this->succussMsg($code, $params),
             'data'    => []
         ];
 
@@ -69,12 +69,35 @@ trait ProvidesConvenienceMethods
     {
         return response()->json([
             'code'    => $code,
-            'message' => !empty($msg) ? $msg : trans('cir_framework_skeleton::errors.' . $code, $params)
+            'message' => $this->errorMsg($code, $params, $msg)
         ], substr($code, 0, 3));
     }
 
     protected function user()
     {
         return Auth::user();
+    }
+
+    protected function successMsg($code = 200, $params = [], $msg = '')
+    {
+        return $this->getReturnMsg('success', $code, $params, $msg);
+    }
+
+    protected function errorMsg($code, $params, $msg)
+    {
+        return $this->getReturnMsg('errors', $code, $params, $msg);
+    }
+
+    private function getReturnMsg($type, $code, $params, $msg)
+    {
+        if (!empty($msg)) {
+            return $msg;
+        }
+
+        $msg = trans($type . '.' . $code, $params);
+        if (trans($type . '.' . $code, $params) == $type . '.' . $code) {
+            $msg = str_replace('cir_framework_skeleton::', '', trans('cir_framework_skeleton::' . $type . '.' . $code, $params));
+        }
+        return $msg;
     }
 }
