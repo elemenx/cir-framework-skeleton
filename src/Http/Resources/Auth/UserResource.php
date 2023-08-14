@@ -2,10 +2,10 @@
 
 namespace Elemenx\CirFrameworkSkeleton\Http\Resources\Auth;
 
-use App\Models\Org;
 use Elemenx\CirFrameworkSkeleton\Http\Resources\Module\ModuleResource;
 use Elemenx\CirFrameworkSkeleton\Http\Resources\Strategy\StrategyResource;
 use Elemenx\CirFrameworkSkeleton\Models\Module;
+use Elemenx\CirFrameworkSkeleton\Models\Org;
 use Elemenx\CirFrameworkSkeleton\Traits\Resource\RouteName;
 use Illuminate\Http\Resources\Json\JsonResource;
 

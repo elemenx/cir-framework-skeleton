@@ -2,8 +2,12 @@
 
 namespace Elemenx\CirFrameworkSkeleton;
 
+use Elemenx\CirFrameworkSkeleton\Http\Middleware\AdminMiddleware;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class CirFrameworkSkeletonServiceProvider extends ServiceProvider
 {
@@ -18,6 +22,8 @@ class CirFrameworkSkeletonServiceProvider extends ServiceProvider
         $this->registerMigrations();
         $this->registerPublishing();
         $this->registerResources();
+        $this->registerValidatorRules();
+        $this->registerMiddlewares();
     }
 
     /**
@@ -86,5 +92,56 @@ class CirFrameworkSkeletonServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/cir_framework_skeleton.php', 'cir_framework_skeleton');
+    }
+
+    /**
+     * Register the elemenx cir framework skeleton validator rules.
+     *
+     * @return void
+     */
+    protected function registerValidatorRules()
+    {
+        Validator::extend('date_range', function ($attribute, $value) {
+            $value = explode(',', $value);
+
+            return count($value) == 2;
+        });
+
+        Validator::extend('exists_except_zero', function ($attribute, $value, $parameters) {
+            if (!isset($parameters[0])) {
+                return false;
+            }
+
+            $explode_first_parameter = explode('.', $parameters[0]);
+            if (count($explode_first_parameter) > 1) {
+                $builder = DB::connection($explode_first_parameter[0])->table($explode_first_parameter[1]);
+            } else {
+                $builder = DB::table($parameters[0]);
+            }
+            $builder = $builder->where($parameters[1] ?? 'id', $value);
+            array_map(function ($item) use (&$builder) {
+                if (Arr::last($item) == 'NULL') {
+                    $builder->whereNull(Arr::first($item));
+                } else {
+                    $builder->where(Arr::first($item), Arr::last($item));
+                }
+            }, array_chunk(array_slice($parameters, 2), 2));
+
+            if ($value != 0 && !$builder->exists()) {
+                return false;
+            }
+
+            return true;
+        });
+    }
+
+    /**
+     * Register the elemenx cir framework skeleton validator rules.
+     *
+     * @return void
+     */
+    protected function registerMiddlewares()
+    {
+        app('router')->aliasMiddleware('admin', AdminMiddleware::class);
     }
 }
