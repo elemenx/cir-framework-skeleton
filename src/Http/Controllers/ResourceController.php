@@ -9,7 +9,6 @@ use Elemenx\CirFrameworkSkeleton\Models\Resourceable;
 use Elemenx\CirFrameworkSkeleton\Http\Requests\Resource\CreateRequest;
 use Elemenx\CirFrameworkSkeleton\Http\Requests\Resource\UpdateRequest;
 use Elemenx\CirFrameworkSkeleton\CirFrameworkSkeleton;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class ResourceController extends Controller

@@ -35,5 +35,7 @@ Route::middleware([$guard ? 'auth:' . $guard : 'auth'])->group(function () {
         Route::post('menu/sequence', ['as' => 'menu.sequence', 'uses' => 'MenuController@sequence']);
         Route::get('resource/{resource}/field', ['as' => 'resource.field', 'uses' => 'ResourceController@fieldList']);
         Route::get('resource/{resource}/data', ['as' => 'resource.data', 'uses' => 'ResourceController@data']);
+        Route::get('setting', 'SettingController@show');
+        Route::post('setting', 'SettingController@setSetting');
     });
 });
