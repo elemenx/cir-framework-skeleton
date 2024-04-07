@@ -32,7 +32,7 @@ class CreateRequest extends FormRequest
             'query'     => 'nullable|string|max:255',
             'params'    => 'nullable|string|max:255',
             'hidden'    => 'boolean',
-            'parent_id' => 'exists_except_zero:menus,id',
+            'parent_id' => 'nullable|exists_except_zero:menus,id',
         ];
     }
 }

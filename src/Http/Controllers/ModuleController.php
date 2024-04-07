@@ -13,6 +13,7 @@ use Elemenx\CirFrameworkSkeleton\Http\Requests\Module\CreateRequest;
 use Elemenx\CirFrameworkSkeleton\Http\Requests\Module\UpdateRequest;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Cache;
 
 class ModuleController extends Controller
 {
@@ -45,15 +46,6 @@ class ModuleController extends Controller
         $data = $request->validated();
         $model = $this->model;
         $model = $model->create(Arr::except($data, 'resources'));
-        $parent_id = Arr::get($data, 'parent_id');
-
-        if (!empty($parent_id)) {
-            $parent = Module::findOrFail($parent_id);
-            $model->prependToNode($parent)->save();
-        } else {
-            $model->setParentId(0);
-            $model->save();
-        }
 
         if (isset($data['resources'])) {
             $collect_resources = collect($data['resources'])->keyBy('id')->map(function ($item) {
@@ -61,6 +53,7 @@ class ModuleController extends Controller
             });
             $model->resources()->sync($collect_resources->toArray());
         }
+        Cache::tags('settings')->flush();
 
         return $this->success(new ShowResource($model));
     }
@@ -69,11 +62,6 @@ class ModuleController extends Controller
     {
         $model = $this->model->findOrFail($module);
         $data = $request->validated();
-        $parent_id = Arr::get($data, 'parent_id');
-        if ($parent_id == 0) {
-            $model->setParentId(0);
-            $data = Arr::except($data, 'parent_id');
-        }
         $model->update(Arr::except($data, 'resources'));
 
         if (isset($data['resources'])) {
@@ -82,6 +70,7 @@ class ModuleController extends Controller
             });
             $model->resources()->sync($collect_resources->toArray());
         }
+        Cache::tags('settings')->flush();
 
         return $this->success(new ShowResource($model));
     }
@@ -124,6 +113,7 @@ class ModuleController extends Controller
             }])->findOrFail($module);
 
         $this->deepCopy($copy_module, $data);
+        Cache::tags('settings')->flush();
 
         return $this->success();
     }

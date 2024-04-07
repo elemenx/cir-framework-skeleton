@@ -9,7 +9,7 @@ use Elemenx\CirFrameworkSkeleton\Traits\Controller\Sequence;
 use Elemenx\CirFrameworkSkeleton\Http\Requests\Menu\CreateRequest;
 use Elemenx\CirFrameworkSkeleton\Http\Requests\Menu\UpdateRequest;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
 
 class MenuController extends Controller
 {
@@ -40,17 +40,10 @@ class MenuController extends Controller
     public function store(CreateRequest $request)
     {
         $data = $request->validated();
-        $parent_id = Arr::get($data, 'parent_id', 0);
-        $parent_id = is_null($parent_id) ? 0 : $parent_id;
         $model = $this->model->create($data);
 
-        if (is_null($model->parent_id)) {
-            $parent_id = Arr::get($data, 'parent_id', 0);
-            $model->setParentId($parent_id);
-            $model->save();
-        }
-
         $this->sequence(new Request(['ids' => $this->model->orderBy('sort', 'ASC')->get()->toFlatTree()->pluck('id')->toArray()]));
+        Cache::tags('settings')->flush();
 
         return $this->success(new ShowResource($model));
     }
@@ -59,13 +52,9 @@ class MenuController extends Controller
     {
         $model = $this->model->findOrFail($menu);
         $data = $request->validated();
-        $parent_id = Arr::get($data, 'parent_id');
-        if ($parent_id == 0) {
-            $model->setParentId(0);
-            $data = Arr::except($data, 'parent_id');
-        }
         $model->update($data);
         $this->sequence(new Request(['ids' => $this->model->orderBy('sort', 'ASC')->get()->toFlatTree()->pluck('id')->toArray()]));
+        Cache::tags('settings')->flush();
 
         return $this->success(new ShowResource($model));
     }
@@ -74,6 +63,7 @@ class MenuController extends Controller
     {
         $model = $this->model->findOrFail($menu);
         $model->delete();
+        Cache::tags('settings')->flush();
 
         return $this->success();
     }

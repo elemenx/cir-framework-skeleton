@@ -11,7 +11,7 @@ use Elemenx\CirFrameworkSkeleton\Http\Requests\Field\CreateRequest;
 use Elemenx\CirFrameworkSkeleton\Http\Requests\Field\UpdateRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class FieldController extends Controller
 {
@@ -52,6 +52,7 @@ class FieldController extends Controller
             'field' => 'list_sequence',
         ]);
         $this->sequence($request);
+        Cache::tags('settings')->flush();
 
         return $this->success(new ShowResource($field));
     }
@@ -62,6 +63,7 @@ class FieldController extends Controller
         $module = Module::findOrFail($module);
         $field = $this->model->where('module_id', $module->id)->findOrFail($field);
         $field->update(Arr::only($data, ['name', 'config']));
+        Cache::tags('settings')->flush();
 
         return $this->success(new ShowResource($field));
     }
@@ -71,6 +73,7 @@ class FieldController extends Controller
         $module = Module::findOrFail($module);
         $field = $this->model->where('module_id', $module->id)->findOrFail($field);
         $field->delete();
+        Cache::tags('settings')->flush();
 
         return $this->success();
     }

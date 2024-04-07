@@ -8,6 +8,7 @@ use Elemenx\CirFrameworkSkeleton\Models\Module;
 use Elemenx\CirFrameworkSkeleton\Models\Org;
 use Elemenx\CirFrameworkSkeleton\Traits\Resource\RouteName;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Cache;
 
 class UserResource extends JsonResource
 {
@@ -46,14 +47,13 @@ class UserResource extends JsonResource
         ];
 
         if ($this->isShowNames(app('request')->route()->getName())) {
-            $modules = Module::sortField()->with('dataResource', 'resources', 'settingCategories', 'settingItems')->get();
-
             $data = array_merge($data, [
                 'acl'        => $this->acl,
                 'raw_acls'   => $this->raw_acls,
                 'orgs'       => $this->getOrgs(),
                 'strategies' => $this->strategies ? StrategyResource::collection($this->strategies) : [],
-                'modules'    => ModuleResource::collection($modules)
+                'modules'    => Cache::tags('settings')
+                ->rememberForever('settings:module', fn () => ModuleResource::collection(Module::sortField()->with('dataResource', 'resources', 'settingCategories', 'settingItems')->get()))
             ]);
         }
 

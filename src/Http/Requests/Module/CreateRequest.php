@@ -31,7 +31,7 @@ class CreateRequest extends FormRequest
             'acl'                          => 'nullable|string',
             'config'                       => 'nullable|array',
             'data_resource_id'             => 'integer',
-            'parent_id'                    => 'integer',
+            'parent_id'                    => 'nullable|integer',
             'parent_identifier'            => 'nullable|string',
             'icon'                         => 'nullable|string',
             'resources'                    => 'array',
