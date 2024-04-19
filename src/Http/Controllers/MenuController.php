@@ -40,6 +40,9 @@ class MenuController extends Controller
     public function store(CreateRequest $request)
     {
         $data = $request->validated();
+        if (array_key_exists('parent_id', $data) && $data['parent_id'] == 0) {
+            $data['parent_id'] = null;
+        }
         $model = $this->model->create($data);
 
         $this->sequence(new Request(['ids' => $this->model->orderBy('sort', 'ASC')->get()->toFlatTree()->pluck('id')->toArray()]));
@@ -52,6 +55,9 @@ class MenuController extends Controller
     {
         $model = $this->model->findOrFail($menu);
         $data = $request->validated();
+        if (array_key_exists('parent_id', $data) && $data['parent_id'] == 0) {
+            $data['parent_id'] = null;
+        }
         $model->update($data);
         $this->sequence(new Request(['ids' => $this->model->orderBy('sort', 'ASC')->get()->toFlatTree()->pluck('id')->toArray()]));
         Cache::tags('settings')->flush();

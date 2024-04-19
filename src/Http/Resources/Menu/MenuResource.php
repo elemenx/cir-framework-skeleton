@@ -25,7 +25,7 @@ class MenuResource extends JsonResource
             'params'    => $this->params,
             'sort'      => $this->sort,
             'hidden'    => $this->hidden,
-            'parent_id' => $this->parent_id,
+            'parent_id' => is_null($this->parent_id) ? 0 : $this->parent_id,
         ];
 
         return $data;
