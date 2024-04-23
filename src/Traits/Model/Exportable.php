@@ -35,7 +35,7 @@ trait Exportable
         return $data;
     }
 
-        /**
+    /**
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param \Illuminate\Http\Request|null $input
      */
@@ -49,7 +49,7 @@ trait Exportable
         return Excel::download($class, $explode_as . '.xlsx');
     }
 
-    private function convertValue($item, $field, $value)
+    protected function convertValue($item, $field, $value)
     {
         $return_value = '暂无';
 
@@ -107,7 +107,7 @@ trait Exportable
         return $this->getExportVar('value');
     }
 
-    private function getExportVar(string $str)
+    protected function getExportVar(string $str)
     {
         $as = app('request')->route()->getName();
         $as = str_replace('.', '_', $as);
