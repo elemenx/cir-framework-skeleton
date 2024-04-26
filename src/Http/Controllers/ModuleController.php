@@ -79,6 +79,7 @@ class ModuleController extends Controller
     {
         $model = $this->model->findOrFail($module);
         $model->delete();
+        Cache::tags('settings')->flush();
 
         return $this->success();
     }
