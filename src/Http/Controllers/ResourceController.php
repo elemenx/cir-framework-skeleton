@@ -10,6 +10,7 @@ use Elemenx\CirFrameworkSkeleton\Http\Requests\Resource\CreateRequest;
 use Elemenx\CirFrameworkSkeleton\Http\Requests\Resource\UpdateRequest;
 use Elemenx\CirFrameworkSkeleton\CirFrameworkSkeleton;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Cache;
 
 class ResourceController extends Controller
 {
@@ -39,6 +40,7 @@ class ResourceController extends Controller
     {
         $data = $request->validated();
         $model = $this->model->create($data);
+        Cache::tags('settings')->flush();
 
         return $this->success(new ShowResource($model));
     }
@@ -48,6 +50,7 @@ class ResourceController extends Controller
         $data = $request->validated();
         $model = $this->model->findOrFail($resource);
         $model->update($data);
+        Cache::tags('settings')->flush();
 
         return $this->success(new ShowResource($model));
     }
@@ -57,6 +60,7 @@ class ResourceController extends Controller
         $model = $this->model->findOrFail($resource);
         Resourceable::where('resource_id', $model->id)->delete();
         $model->delete();
+        Cache::tags('settings')->flush();
 
         return $this->success();
     }
@@ -71,7 +75,7 @@ class ResourceController extends Controller
             return $this->error(42205);
         }
 
-        $model = new $classname;
+        $model = new $classname();
 
         return $this->success(array_diff($model->getColumns(), $model->getHidden()));
     }
@@ -85,7 +89,7 @@ class ResourceController extends Controller
             return $this->error(42205);
         }
 
-        $model = new $classname;
+        $model = new $classname();
         $model->sortField();
 
         if ($resource->type == 'paginate') {
