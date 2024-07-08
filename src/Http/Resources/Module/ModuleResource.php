@@ -31,7 +31,7 @@ class ModuleResource extends JsonResource
             'params'            => $this->params,
             'config'            => $this->config,
             'data_resource_id'  => $this->data_resource_id,
-            'parent_id'         => $this->parent_id,
+            'parent_id'         => is_null($this->parent_id) ? 0 : $this->parent_id,
             'parent_identifier' => $this->parent_identifier,
             'icon'              => $this->icon,
             'resources'         => ResResource::collection($this->resources),
