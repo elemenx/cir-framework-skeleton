@@ -242,4 +242,44 @@ class ModuleController extends Controller
             SettingItem::insert($items);
         }
     }
+
+    public function batch()
+    {
+        $data = $this->validate(request(), [
+            'modules'                                  => 'required|array',
+            'modules.*.name'                           => 'required|string',
+            'modules.*.identifier'                     => 'required|string|unique:modules,identifier',
+            'modules.*.acl'                            => 'required|string',
+            'modules.*.type'                           => 'string',
+            'modules.*.params'                         => 'array',
+            'modules.*.data_resource_id'               => 'integer',
+            'modules.*.sub_modules'                    => 'array',
+            'modules.*.sub_modules.*.name'             => 'string',
+            'modules.*.sub_modules.*.identifier'       => 'string|unique:modules,identifier',
+            'modules.*.sub_modules.*.acl'              => 'string',
+            'modules.*.sub_modules.*.type'             => 'string',
+            'modules.*.sub_modules.*.data_resource_id' => 'string',
+            'modules.*.sub_modules.*.params'           => 'array',
+        ]);
+
+        foreach ($data['modules'] as $module) {
+            $module = Module::create(Arr::excpet($module, ['sub_modules']));
+            $sub_modules = (array)Arr::get($module, 'sub_modules');
+
+            foreach ($sub_modules as $sub_module) {
+                Module::create(
+                    array_merge(
+                        Arr::only($sub_module, ['name', 'identifier', 'acl', 'type', 'params', 'data_resource_id']),
+                        [
+                            'parent_identifier' => Arr::get($module, 'identifier'),
+                            'parent_id'         => $module->id
+                        ]
+                    )
+                );
+            }
+        }
+        Cache::tags('settings')->flush();
+
+        return $this->success();
+    }
 }

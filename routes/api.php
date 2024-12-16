@@ -31,6 +31,7 @@ Route::middleware([$guard ? 'auth:' . $guard : 'auth'])->group(function () {
         Route::post('setting_item/sequence', ['as' => 'setting_item.sequence', 'uses' => 'SettingItemController@sequence']);
         Route::post('module/{module}/copy', ['as' => 'module.copy', 'uses' => 'ModuleController@copy']);
         Route::post('module/sequence', ['as' => 'module.sequence', 'uses' => 'ModuleController@sequence']);
+        Route::post('module/batch', ['as' => 'module.batch', 'uses' => 'ModuleController@batch']);
         Route::post('module/{module}/field/sequence', ['as' => 'module.field.sequence', 'uses' => 'FieldController@sequence']);
         Route::post('menu/sequence', ['as' => 'menu.sequence', 'uses' => 'MenuController@sequence']);
         Route::get('resource/{resource}/field', ['as' => 'resource.field', 'uses' => 'ResourceController@fieldList']);
