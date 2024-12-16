@@ -262,9 +262,9 @@ class ModuleController extends Controller
             'modules.*.sub_modules.*.params'           => 'array',
         ]);
 
-        foreach ($data['modules'] as $module) {
-            $module = Module::create(Arr::excpet($module, ['sub_modules']));
-            $sub_modules = (array)Arr::get($module, 'sub_modules');
+        foreach ($data['modules'] as $module_data) {
+            $module = Module::create(Arr::except($module_data, ['sub_modules']));
+            $sub_modules = (array)Arr::get($module_data, 'sub_modules');
 
             foreach ($sub_modules as $sub_module) {
                 Module::create(
