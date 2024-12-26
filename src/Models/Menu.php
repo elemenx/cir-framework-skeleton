@@ -21,7 +21,8 @@ class Menu extends Model
     ];
 
     protected $casts = [
-        'hidden' => 'boolean'
+        'hidden'     => 'boolean',
+        'open_blank' => 'boolean',
     ];
 
     protected $columns = [
