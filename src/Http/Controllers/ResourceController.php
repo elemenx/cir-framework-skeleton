@@ -24,7 +24,7 @@ class ResourceController extends Controller
 
     public function index()
     {
-        $models = $this->model->sortField()->apiPaginate();
+        $models = $this->model->filterField()->sortField()->apiPaginate();
 
         return $this->success(new IndexCollection($models));
     }
