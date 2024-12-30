@@ -18,6 +18,7 @@ $guard = config('cir_framework_skeleton.guard.auth', null);
 Route::middleware([$guard ? 'auth:' . $guard : 'auth'])->group(function () {
     Route::as('session')->get('session', 'SessionController@session');
 
+    Route::resource('common_form', 'CommonFormController');
     Route::resource('module', 'ModuleController');
     Route::resource('module.field', 'FieldController');
     Route::get('module/{module}/field_sequence_list', ['as' => 'module.field_sequence_list', 'uses' => 'ModuleController@fieldSequenceList']);
