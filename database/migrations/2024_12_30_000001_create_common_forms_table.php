@@ -10,8 +10,8 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        if (!Schema::hasTable('command_forms')) {
-            Schema::create('command_forms', function (Blueprint $table) {
+        if (!Schema::hasTable('common_forms')) {
+            Schema::create('common_forms', function (Blueprint $table) {
                 $table->id();
                 $table->string('name');
                 $table->longText('dsl')->nullable();
@@ -25,8 +25,8 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        if (Schema::hasTable('command_forms')) {
-            Schema::dropIfExists('command_forms');
+        if (Schema::hasTable('common_forms')) {
+            Schema::dropIfExists('common_forms');
         }
     }
 };
