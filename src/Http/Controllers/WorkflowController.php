@@ -14,14 +14,17 @@ class WorkflowController extends Controller
 
     public function index()
     {
-        $models = $this->model->filterField()->sortField()->apiPaginate();
+        $models = $this->model->filterField()
+            ->sortField()
+            ->with('commonForm')
+            ->apiPaginate();
 
         return $this->success($models);
     }
 
     public function show($id)
     {
-        $model = $this->model->findOrFail($id);
+        $model = $this->model->with('commonForm')->findOrFail($id);
 
         return $this->success($model);
     }

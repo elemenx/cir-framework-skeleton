@@ -43,4 +43,9 @@ class Workflow extends Model
     {
         return $builder->where($field, 'like', '%' . $value . '%');
     }
+
+    public function commonForm()
+    {
+        return $this->hasOne(CommonForm::class, 'identifier', 'common_form_identifier');
+    }
 }
