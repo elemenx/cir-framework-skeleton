@@ -18,6 +18,7 @@ $guard = config('cir_framework_skeleton.guard.auth', null);
 Route::middleware([$guard ? 'auth:' . $guard : 'auth'])->group(function () {
     Route::as('session')->get('session', 'SessionController@session');
 
+    Route::resource('workflow', 'WorkflowController');
     Route::resource('common_form', 'CommonFormController');
     Route::resource('module', 'ModuleController');
     Route::resource('module.field', 'FieldController');
