@@ -29,14 +29,14 @@ class ModuleController extends Controller
 
     public function index()
     {
-        $models = $this->model->sortField()->with('resources', 'dataResource', 'settingItems', 'settingCategories')->get();
+        $models = $this->model->sortField()->with('resources', 'dataResource', 'settingItems', 'settingCategories', 'workflow:id,name,identifier')->get();
 
         return $this->success(IndexResource::collection($models));
     }
 
     public function show($module)
     {
-        $model = $this->model->with('dataResource', 'resources', 'settingItems', 'settingCategories', 'fields')->findOrFail($module);
+        $model = $this->model->with('dataResource', 'resources', 'settingItems', 'settingCategories', 'fields', 'workflow')->findOrFail($module);
 
         return $this->success(new ShowResource($model));
     }

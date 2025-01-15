@@ -23,6 +23,7 @@ class Module extends Model
     protected $columns = [
         'id',
         'identifier',
+        'workflow_identifier',
         'type',
         'name',
         'acl',
@@ -65,5 +66,10 @@ class Module extends Model
     public function settingItems()
     {
         return $this->hasMany(SettingItem::class, 'module_id');
+    }
+
+    public function workflow()
+    {
+        return $this->hasOne(Workflow::class, 'identifier', 'workflow_identifier');
     }
 }

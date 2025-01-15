@@ -23,19 +23,21 @@ class ModuleResource extends JsonResource
     public function toArray($request)
     {
         $data = [
-            'id'                => $this->id,
-            'identifier'        => $this->identifier,
-            'type'              => $this->type,
-            'acl'               => $this->acl,
-            'name'              => $this->name,
-            'params'            => $this->params,
-            'config'            => $this->config,
-            'data_resource_id'  => $this->data_resource_id,
-            'parent_id'         => is_null($this->parent_id) ? 0 : $this->parent_id,
-            'parent_identifier' => $this->parent_identifier,
-            'icon'              => $this->icon,
-            'resources'         => ResResource::collection($this->resources),
-            'data_resource'     => new ResResource($this->dataResource)
+            'id'                  => $this->id,
+            'identifier'          => $this->identifier,
+            'workflow_identifier' => $this->workflow_identifier,
+            'type'                => $this->type,
+            'acl'                 => $this->acl,
+            'name'                => $this->name,
+            'params'              => $this->params,
+            'config'              => $this->config,
+            'data_resource_id'    => $this->data_resource_id,
+            'parent_id'           => is_null($this->parent_id) ? 0 : $this->parent_id,
+            'parent_identifier'   => $this->parent_identifier,
+            'icon'                => $this->icon,
+            'resources'           => ResResource::collection($this->resources),
+            'data_resource'       => new ResResource($this->dataResource),
+            'workflow'            => $this->workflow,
         ];
 
         $setting = [];
