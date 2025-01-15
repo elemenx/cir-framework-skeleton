@@ -27,6 +27,7 @@ class CreateRequest extends FormRequest
             'name'                         => 'required|string',
             'type'                         => 'required|string|in:action,permission,module,listPage,tabPage,configPage,customPage',
             'identifier'                   => 'unique:modules,identifier',
+            'workflow_identifier'          => 'exists:workflows,identifier',
             'params'                       => 'nullable|array',
             'acl'                          => 'nullable|string',
             'config'                       => 'nullable|array',
