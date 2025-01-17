@@ -282,4 +282,21 @@ class ModuleController extends Controller
 
         return $this->success();
     }
+
+    public function move()
+    {
+        $data = $this->validate(request(), [
+            'node_id'          => 'required|integer',
+            'neighbor_node_id' => 'required|integer'
+        ]);
+
+        $node = $this->model->findOrFail($data['node_id']);
+        $neighbor = $this->model->query()->findOrFail($data['neighbor_node_id']);
+
+        $result = $node->afterNode($neighbor)->save();
+
+        return $this->success([
+            'result' => $result
+        ]);
+    }
 }
