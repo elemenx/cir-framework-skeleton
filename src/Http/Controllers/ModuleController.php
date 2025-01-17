@@ -294,6 +294,7 @@ class ModuleController extends Controller
         $neighbor = $this->model->query()->findOrFail($data['neighbor_node_id']);
 
         $result = $node->afterNode($neighbor)->save();
+        Cache::tags('settings')->flush();
 
         return $this->success([
             'result' => $result
