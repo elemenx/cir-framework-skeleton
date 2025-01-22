@@ -27,7 +27,7 @@ class UpdateRequest extends FormRequest
             'name'                         => 'sometimes|required|string',
             'type'                         => 'sometimes|required|string|in:action,permission,module,listPage,tabPage,configPage,customPage',
             'identifier'                   => 'string|unique:modules,identifier,' . app('request')->route('module') . ',id',
-            'workflow_identifier'          => 'exists:workflows,identifier',
+            'workflow_identifier'          => 'nullable|exists:workflows,identifier',
             'acl'                          => 'nullable|string',
             'params'                       => 'nullable|array',
             'config'                       => 'nullable|array',
