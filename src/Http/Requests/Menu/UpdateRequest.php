@@ -27,7 +27,7 @@ class UpdateRequest extends FormRequest
             'title'      => 'required|string|max:255',
             'sub_title'  => 'required|string|max:255',
             'path'       => 'required|string|max:255',
-            'acl'        => 'required|string|max:255',
+            'acl'        => 'nullable|string|max:255',
             'icon'       => 'nullable|string|max:255',
             'query'      => 'nullable|string|max:255',
             'params'     => 'nullable|string|max:255',
