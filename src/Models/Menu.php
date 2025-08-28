@@ -10,6 +10,8 @@ class Menu extends Model
 
     public $timestamps = false;
 
+    protected static $nodeTraitBooted = false;
+
     protected $default_sort_field = 'sort';
 
     protected $direction = 'ASC';
@@ -40,6 +42,39 @@ class Menu extends Model
         '_lft',
         '_rgt'
     ];
+
+    public static function bootNodeTrait()
+    {
+        // 防止在 Octane 模式下重复注册
+        if (static::$nodeTraitBooted) {
+            return;
+        }
+
+        static::$nodeTraitBooted = true;
+
+        static::saving(function ($model) {
+            return $model->callPendingAction();
+        });
+
+        static::deleting(function ($model) {
+            // We will need fresh data to delete node safely
+            $model->refreshNode();
+        });
+
+        static::deleted(function ($model) {
+            $model->deleteDescendants();
+        });
+
+        if (static::usesSoftDelete()) {
+            static::restoring(function ($model) {
+                static::$deletedAt = $model->{$model->getDeletedAtColumn()};
+            });
+
+            static::restored(function ($model) {
+                $model->restoreDescendants(static::$deletedAt);
+            });
+        }
+    }
 
     public function children()
     {
