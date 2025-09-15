@@ -14,12 +14,7 @@ class FieldResource extends JsonResource
      */
     public function toArray($request)
     {
-        $data = [
-            'id'        => $this->id,
-            'module_id' => $this->module_id,
-            'name'      => $this->name,
-            'config'    => $this->config,
-        ];
+        $data = $this->resource->toArray();
 
         return $data;
     }

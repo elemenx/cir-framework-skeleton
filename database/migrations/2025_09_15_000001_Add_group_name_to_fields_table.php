@@ -11,8 +11,8 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('fields', function (Blueprint $table) {
-            if (Schema::hasColumn('fields', 'group_name')) {
-                $table->string('group_name')->nullable()->comment('分组')->after('name')->change();
+            if (!Schema::hasColumn('fields', 'group_name')) {
+                $table->string('group_name')->nullable()->comment('分组')->after('name');
             }
         });
     }
