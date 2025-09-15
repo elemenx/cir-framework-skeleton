@@ -2,6 +2,8 @@
 
 namespace Elemenx\CirFrameworkSkeleton\Models;
 
+use Illuminate\Support\Arr;
+
 class Field extends Model
 {
     public $timestamps = false;
@@ -33,5 +35,10 @@ class Field extends Model
     public function module()
     {
         return $this->belongsTo(Module::class);
+    }
+
+    public function getIdentifierAttribute()
+    {
+        return Arr::get(json_decode($this->config, true), 'identifier', $this->name);
     }
 }
