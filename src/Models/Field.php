@@ -24,6 +24,7 @@ class Field extends Model
         'id',
         'module_id',
         'name',
+        'group_name',
         'config',
         'list_sequence',
         'search_sequence'

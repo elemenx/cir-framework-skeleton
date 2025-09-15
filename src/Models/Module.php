@@ -80,7 +80,7 @@ class Module extends Model
 
     public function fields()
     {
-        return $this->hasMany(Field::class);
+        return $this->hasMany(Field::class)->oldest('list_sequence');
     }
 
     public function selfResource()
