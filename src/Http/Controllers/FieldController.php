@@ -62,7 +62,7 @@ class FieldController extends Controller
         $data = $request->validated();
         $module = Module::findOrFail($module);
         $field = $this->model->where('module_id', $module->id)->findOrFail($field);
-        $field->update(Arr::only($data, ['name', 'config']));
+        $field->update(Arr::only($data, ['name', 'config', 'group_name']));
         Cache::tags('settings')->flush();
 
         return $this->success(new ShowResource($field));
