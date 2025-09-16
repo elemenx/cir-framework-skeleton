@@ -24,8 +24,9 @@ class CreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'   => 'required|string|unique:fields,name,,id,module_id,' . app('request')->route('module'),
-            'config' => 'nullable|string',
+            'name'       => 'required|string|unique:fields,name,,id,module_id,' . app('request')->route('module'),
+            'group_name' => 'nullable|string',
+            'config'     => 'nullable|string',
         ];
     }
 }

@@ -24,8 +24,9 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'   => 'string|unique:fields,name,' . app('request')->route('field') . ',id,module_id,' . app('request')->route('module'),
-            'config' => 'nullable|string',
+            'name'       => 'string|unique:fields,name,' . app('request')->route('field') . ',id,module_id,' . app('request')->route('module'),
+            'group_name' => 'nullable|string',
+            'config'     => 'nullable|string',
         ];
     }
 }
