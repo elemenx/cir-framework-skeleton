@@ -61,6 +61,8 @@ trait Exportable
             $return_value = $item->{$field};
         } elseif (is_array($value)) {
             $return_value = Arr::get($value, $item->{$field});
+        } elseif ($value instanceof \Closure) {
+            $return_value = $value($item);
         } elseif (is_string($value)) {
             if ($this->isAttributeFunction($value)) {
                 return $item->{lcfirst(Str::between($value, 'get', 'Attribute'))};
