@@ -44,7 +44,7 @@ class MenuController extends Controller
             $data['parent_id'] = null;
         }
         $model = $this->model->create($data);
-
+        Menu::fixTree();
         $this->sequence(new Request(['ids' => $this->model->orderBy('sort', 'ASC')->get()->toFlatTree()->pluck('id')->toArray()]));
         Cache::tags('settings')->flush();
 
@@ -59,6 +59,7 @@ class MenuController extends Controller
             $data['parent_id'] = null;
         }
         $model->update($data);
+        Menu::fixTree();
         $this->sequence(new Request(['ids' => $this->model->orderBy('sort', 'ASC')->get()->toFlatTree()->pluck('id')->toArray()]));
         Cache::tags('settings')->flush();
 
@@ -69,6 +70,7 @@ class MenuController extends Controller
     {
         $model = $this->model->findOrFail($menu);
         $model->delete();
+        Menu::fixTree();
         Cache::tags('settings')->flush();
 
         return $this->success();

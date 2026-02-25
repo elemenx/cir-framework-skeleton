@@ -46,7 +46,7 @@ class ModuleController extends Controller
         $data = $request->validated();
         $model = $this->model;
         $model = $model->create(Arr::except($data, 'resources'));
-
+        Module::fixTree();
         if (isset($data['resources'])) {
             $collect_resources = collect($data['resources'])->keyBy('id')->map(function ($item) {
                 return ['identifier_alias' => Arr::get($item, 'identifier_alias')];
@@ -63,7 +63,7 @@ class ModuleController extends Controller
         $model = $this->model->findOrFail($module);
         $data = $request->validated();
         $model->update(Arr::except($data, 'resources'));
-
+        Module::fixTree();
         if (isset($data['resources'])) {
             $collect_resources = collect($data['resources'])->keyBy('id')->map(function ($item) {
                 return ['identifier_alias' => Arr::get($item, 'identifier_alias')];
@@ -79,6 +79,7 @@ class ModuleController extends Controller
     {
         $model = $this->model->findOrFail($module);
         $model->delete();
+        Module::fixTree();
         Cache::tags('settings')->flush();
 
         return $this->success();
