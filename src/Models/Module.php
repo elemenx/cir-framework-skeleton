@@ -73,6 +73,11 @@ class Module extends Model
         }
     }
 
+    public static function resetNodeTraitBooted()
+    {
+        static::$nodeTraitBooted = false;
+    }
+
     public function resources()
     {
         return $this->morphToMany(Resource::class, 'resourceable')->withPivot('identifier_alias');

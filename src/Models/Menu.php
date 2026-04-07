@@ -76,6 +76,11 @@ class Menu extends Model
         }
     }
 
+    public static function resetNodeTraitBooted()
+    {
+        static::$nodeTraitBooted = false;
+    }
+
     public function children()
     {
         return $this->hasMany(Menu::class, 'parent_id');
