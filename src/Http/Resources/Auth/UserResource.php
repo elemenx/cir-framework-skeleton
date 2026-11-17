@@ -52,8 +52,7 @@ class UserResource extends JsonResource
                 'raw_acls'   => $this->raw_acls,
                 'orgs'       => $this->getOrgs(),
                 'strategies' => $this->strategies ? StrategyResource::collection($this->strategies) : [],
-                'modules'    => Cache::tags('settings')
-                ->rememberForever('settings:module', fn () => ModuleResource::collection(Module::sortField()->with('dataResource', 'resources', 'settingCategories', 'settingItems')->get()))
+                'modules'    => $this->modules()
             ]);
         }
 
@@ -67,5 +66,50 @@ class UserResource extends JsonResource
         }
 
         return $this->orgs;
+    }
+
+    /**
+     * Get the cached modules payload.
+     *
+     * The cache must only contain plain arrays: with cache.serializable_classes
+     * disabled (the default in Laravel 13), any cached object is read back as
+     * __PHP_Incomplete_Class.
+     *
+     * @return array
+     */
+    protected function modules(): array
+    {
+        $modules = Cache::tags('settings')->get('settings:module');
+
+        // Entries written by older versions contain resource objects and can no
+        // longer be hydrated, so rebuild them instead of serving broken data.
+        if (is_array($modules)) {
+            return $modules;
+        }
+
+        $modules = $this->buildModules();
+
+        Cache::tags('settings')->forever('settings:module', $modules);
+
+        return $modules;
+    }
+
+    /**
+     * Build the modules payload as a plain array.
+     *
+     * @return array
+     */
+    protected function buildModules(): array
+    {
+        $collection = ModuleResource::collection(
+            Module::sortField()
+                ->with('dataResource', 'resources', 'settingCategories', 'settingItems')
+                ->get()
+        );
+
+        // Round-trip through JSON so nested resources are flattened as well.
+        $modules = json_decode($collection->toJson(), true);
+
+        return is_array($modules) ? $modules : [];
     }
 }
